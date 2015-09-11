@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+
 using FormulaEvaluator;
 
 namespace Tester
@@ -41,11 +42,20 @@ namespace Tester
             //Console.WriteLine(Evaluator.Evaluate("X1", MyLookupFunction));
 
             // Storing function in variable and passing in the variable
-            //Evaluator.Lookup l2 = MyLookupFunction;
-          //  Console.WriteLine(Evaluator.Evaluate("X1", l2));
+            Evaluator.Lookup l2 = MyLookupFunction;
+             // Console.WriteLine(Evaluator.Evaluate("X1", l2));
 
             // Using lambda expression
-            Console.WriteLine(Evaluator.Evaluate("X1+X2+A3", s => 1));
+           // try {
+                Console.WriteLine(Evaluator.Evaluate("1+2", s => 1));
+
+           // Console.WriteLine(Evaluator.Evaluate("", s => 1));
+            //}
+            //catch(FormatException)
+            //{
+            //    Console.WriteLine("FormatException");
+
+            //}
             Console.Read();
         }
     }

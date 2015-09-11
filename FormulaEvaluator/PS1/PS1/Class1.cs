@@ -1,4 +1,7 @@
-﻿using System;
+﻿//Gabriel Kenworthy
+//CS3500
+//Fall 2015
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +11,7 @@ using System.Text.RegularExpressions;
 namespace FormulaEvaluator
 {
     /// <summary>
-    /// Wow! A class header! Documentation is great!
+    /// This is the Evaluator Class
     /// </summary>
     public static class Evaluator
     {
@@ -25,21 +28,19 @@ namespace FormulaEvaluator
         /// <returns></returns>
         public static int Evaluate(String exp, Lookup l)
         {
+            ///<summary>
+            ///  This is our initiation of the variable we use to track the current number to find the solution. Also the end result which is why it's named "Last"
+            ///</summary>
+
             String last = "";
             //string[] substrings = Regex.Split(exp, "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");
 
-            string[] subvariables = Regex.Split("a b c d e f g h i j k l m n o p q r s t u v w x y z", " ");
-           // var errorCounter = Regex.Matches(exp, @"[a-zA-Z]").Count;
-            /*
-                        Regex objects are used to define a pattern that strings can match
-             Basic Regex symbols:
-             [] Define a set of items
-             *  Repeat 0 or more
-             +  Repeat 1 or more
-             ^  Start input
-             $  End input
-             */
+            // string[] subvariables = Regex.Split("a b c d e f g h i j k l m n o p q r s t u v w x y z", " ");
+            // var errorCounter = Regex.Matches(exp, @"[a-zA-Z]").Count;
 
+            ///<summary>
+            /// Create a Regex object to use expression methods to track our expression with less code and hastle. Create two stacks to process the integers/operators
+            ///</summary>
             Regex r = new Regex(exp);
 
             Stack<String> Operators = new Stack<string>();
@@ -49,106 +50,174 @@ namespace FormulaEvaluator
 
                 for (int t = exp.Length - 1; t >= 0; t--)
                 {
-                    
-                   // Regex reg = new Regex(subvariables);
+                    ///<summary>
+                    /// iterate through a loop decide which values to push onto a stack.
+                    ///</summary>
 
                     if (!r.IsMatch(exp[t].ToString()) && !((exp[t].Equals("(")) || (exp[t].Equals(")") || (exp[t].Equals("+") || (exp[t].Equals("-") || (exp[t].Equals("/") || (exp[t].Equals("*"))))))))
                     {
 
                         //division by zero exception
-                        if (Operators.Peek().Equals("*") || Operators.Peek().Equals("/"))
+                        try
                         {
+                            if (Operators.Count > 0)
+                            { ///<summary>
+                              /// put a try/catch statement to prevent crashing by dividing by a possible 0;
+                              ///</summary>
+                                if (Operators.Peek().Equals("*") || Operators.Peek().Equals("/"))
+                                {
 
-                            String eventVal = exp[t].ToString();
-                            String eventVal2 = Values.Pop();
-                            String eventOp = Operators.Pop();
+                                    String eventVal = exp[t].ToString();
+                                    String eventVal2 = Values.Pop();
+                                    String eventOp = Operators.Pop();
 
 
-                            if (Operators.Peek().Equals("*"))
-                            {
-                                int newVal = Int32.Parse(eventVal) * Int32.Parse(eventVal2);
-                                String newValString = newVal.ToString();
-                                Values.Push(newValString);
-                            }
-                            else
-                            {
-                                int newVal = Int32.Parse(eventVal) / Int32.Parse(eventVal2);
-                                String newValString = newVal.ToString();
-                                Values.Push(newValString);
+                                    if (Operators.Peek().Equals("*"))
+                                    {
+                                        ///<summary>
+                                        /// Peek at the top of the stack to determine whether or not to multiply or divide based on the character.
+                                        ///</summary>
+                                        int reslt = 0;
+                                        if (int.TryParse(eventVal,out reslt) && (int.TryParse(eventVal2, out reslt)))
+                                        {
+                                            int newVal = Int32.Parse(eventVal) * Int32.Parse(eventVal2);
+                                            String newValString = newVal.ToString();
+                                            Values.Push(newValString);
+                                        }
+                                    
+                                    }
+                                    else
+                                    {
+                                        ///<summary>
+                                        /// I tried this method below to prevent format errors. Never found out why but it helped me. It allows the code to continue.
+                                        ///</summary>
+                                        int rsult = 0;
+                                        if (int.TryParse(eventVal, out rsult) && (int.TryParse(eventVal2, out rsult)))
+                                        {
+                                            int newVal = Int32.Parse(eventVal) / Int32.Parse(eventVal2);
+                                            String newValString = newVal.ToString();
+                                            Values.Push(newValString);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Values.Push(exp[t].ToString());
+                                }
                             }
                         }
-                        else
+                        ///<summary>
+                        /// convert the spot at the array to string to push back onto the stack. A char cannot be pushed onto a string array stack, so we convert it. Try to catch an InvalidOperationException in case a character isn't handled right.
+                        ///</summary>
+                        catch (InvalidOperationException)
                         {
-                            Values.Push(exp[t].ToString());
+                            Console.WriteLine("InvalidOperationException");
+
                         }
                     }
+              
                     else if (exp[t].Equals("(") || t.Equals("/") || exp[t].Equals("*"))
                     {
                         Operators.Push(exp[t].ToString());
                     }
                     else if (t.Equals("+") || t.Equals("-"))
                     {
+                        ///<summary>
+                        /// keep track of variable to do basic notation for math.
+                        ///</summary>
                         String eventVal = Values.Pop();
                         String eventVal2 = Values.Pop();
                         String eventOp = Operators.Pop();
 
                         if (Operators.Peek().Equals("+")) 
                         {
-                            int newVal = Int32.Parse(eventVal) + Int32.Parse(eventVal2);
-                            String newValString = newVal.ToString();
-                            Values.Push(newValString);
+                            int rsltt = 0;
+                            if (int.TryParse(eventVal, out rsltt) && (int.TryParse(eventVal2, out rsltt)))
+                            {
+                                int newVal = Int32.Parse(eventVal) + Int32.Parse(eventVal2);
+                                String newValString = newVal.ToString();
+                                Values.Push(newValString);
+                            }
                         }
                         else
                         {
-                            int newVal = Int32.Parse(eventVal) - Int32.Parse(eventVal2);
-                            String newValString = newVal.ToString();
-                            Values.Push(newValString);
+                            int rrslt = 0;
+                            if (int.TryParse(eventVal, out rrslt) && (int.TryParse(eventVal2, out rrslt)))
+                            {
+                                int newVal = Int32.Parse(eventVal) - Int32.Parse(eventVal2);
+                                String newValString = newVal.ToString();
+                                Values.Push(newValString);
+                            }
                         }
                         Operators.Push(exp[t].ToString());
                     }
                     else if (exp[t].Equals(")"))
                     {
+                        ///<summary>
+                         /// keep track of variable to do basic notation for math.
+
+                        ///</summary>
                         if (Operators.Peek().Equals("+") || Operators.Peek().Equals("-"))
                         {
                             String eventVal = Values.Pop();
                             String eventVal2 = Values.Pop();
                             String eventOp = Operators.Pop();
 
-                            if (Operators.Peek() == "+")
+                         
+
+                                if (Operators.Peek() == "+")
                             {
-                                int newVal = Int32.Parse(eventVal) + Int32.Parse(eventVal2);
-                                String newValString = newVal.ToString();
-                                Values.Push(newValString);
+                                int rsslt = 0;
+                                if (int.TryParse(eventVal, out rsslt) && (int.TryParse(eventVal2, out rsslt)))
+                                {
+                                    int newVal = Int32.Parse(eventVal) + Int32.Parse(eventVal2);
+                                    String newValString = newVal.ToString();
+                                    Values.Push(newValString);
+                                }
                             }
                             else
                             {
-                                int newVal = Int32.Parse(eventVal) - Int32.Parse(eventVal2);
-                                String newValString = newVal.ToString();
-                                Values.Push(newValString);
+                                ///<summary>
+                                /// keep track of variable to do basic notation for math.
+
+                                ///</summary>
+                                int rsllt = 0;
+                                if (int.TryParse(eventVal, out rsllt) && (int.TryParse(eventVal2, out rsllt)))
+                                {
+                                    int newVal = Int32.Parse(eventVal) - Int32.Parse(eventVal2);
+                                    String newValString = newVal.ToString();
+                                    Values.Push(newValString);
+                                }
                             }
                             Operators.Pop();
                         }
                         else if(Operators.Peek().Equals("*") || Operators.Peek().Equals("/"))
                             {
+                            
                             String eventVal = Values.Pop();
                             String eventVal2 = Values.Pop();
                             String eventOp = Operators.Pop();
 
-                            if (Operators.Peek() == "*")
+                            int rslt1 = 0;
+                            if (int.TryParse(eventVal, out rslt1) && (int.TryParse(eventVal2, out rslt1)))
                             {
-                                int newVal = Int32.Parse(eventVal) * Int32.Parse(eventVal2);
-                                String newValString = newVal.ToString();
-                                Values.Push(newValString);
-                            }
-                            else
-                            {
-                                int newVal = Int32.Parse(eventVal) / Int32.Parse(eventVal2);
-                                String newValString = newVal.ToString();
-                                Values.Push(newValString);
+                                if (Operators.Peek() == "*")
+                                {
+                                    int newVal = Int32.Parse(eventVal) * Int32.Parse(eventVal2);
+                                    String newValString = newVal.ToString();
+                                    Values.Push(newValString);
+                                }
+                                else
+                                {
+                                    int newVal = Int32.Parse(eventVal) / Int32.Parse(eventVal2);
+                                    String newValString = newVal.ToString();
+                                    Values.Push(newValString);
+                                }
                             }
                         }
                         else
                         {
+                        
                             //variables
                             if (Operators.Peek().Equals("*") || Operators.Peek().Equals("/"))
                             {
@@ -156,23 +225,29 @@ namespace FormulaEvaluator
                                 String eventVal = exp[t].ToString();
                                 String eventVal2 = Values.Pop();
                                 String eventOp = Operators.Pop();
-
-
-                                if (Operators.Peek().Equals("*"))
+                                ///<summary>
+                                /// if a variable shows up in the expression rather than an integer or operator, treat it the same but reference through our Lookup method L. The delegate makes this convenient to communicate different methods across classes.
+                                ///</summary>
+                                int rslt2 = 0;
+                                if (int.TryParse(eventVal, out rslt2) && (int.TryParse(eventVal2, out rslt2)))
                                 {
-                                    int newVal =l(eventVal) * l(eventVal2);
-                                    String newValString = newVal.ToString();
-                                    Values.Push(newValString);
-                                }
-                                else
-                                {
-                                    int newVal = l(eventVal) / l(eventVal2);
-                                    String newValString = newVal.ToString();
-                                    Values.Push(newValString);
+                                    if (Operators.Peek().Equals("*"))
+                                    {
+                                        int newVal = l(eventVal) * l(eventVal2);
+                                        String newValString = newVal.ToString();
+                                        Values.Push(newValString);
+                                    }
+                                    else
+                                    {
+                                        int newVal = l(eventVal) / l(eventVal2);
+                                        String newValString = newVal.ToString();
+                                        Values.Push(newValString);
+                                    }
                                 }
                             }
                             else
                             {
+                           
                                 Values.Push(exp[t].ToString());
                             }
                             if (Operators.Count() == 0)
@@ -185,28 +260,37 @@ namespace FormulaEvaluator
                                 String eventVal2 = Values.Pop();
                                 String eventOp = Operators.Pop();
 
-
-                                if (Operators.Peek().Equals("+"))
+                                int rslt3 = 0;
+                                if (int.TryParse(eventVal, out rslt3) && (int.TryParse(eventVal2, out rslt3)))
                                 {
-                                    int newVal = Int32.Parse(eventVal) + Int32.Parse(eventVal2);
-                                    String newValString = newVal.ToString();
-                                    last = newValString;
-                                    Console.WriteLine(last);
+                                    if (Operators.Peek().Equals("+"))
+                                    {
+                                        int newVal = Int32.Parse(eventVal) + Int32.Parse(eventVal2);
+                                        String newValString = newVal.ToString();
+                                        last = newValString;
+                                        Console.WriteLine(last);
+                                        ///<summary>
+                                        /// set last to the remaining number on the stack.
+                                        ///</summary>
 
-                                }
-                                else
-                                {
-                                    int newVal = Int32.Parse(eventVal) - Int32.Parse(eventVal2);
-                                    String newValString = newVal.ToString();
-                                    last = newValString;
-                                    Console.WriteLine(last);
+                                    }
+                                    else
+                                    {
+                                        int newVal = Int32.Parse(eventVal) - Int32.Parse(eventVal2);
+                                        String newValString = newVal.ToString();
+                                        last = newValString;
+                                        Console.WriteLine(last);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-            catch(DivideByZeroException)
+            ///<summary>
+            /// throw another dividebyzero catch statment to ensure less crashes.
+            ///</summary>
+            catch (DivideByZeroException)
             {
                 Console.WriteLine("DIVIDE BY ZERO EXCEPTION");
 
@@ -223,16 +307,25 @@ namespace FormulaEvaluator
 
             // You can call the function l contains by using the same syntax as
             // a function call
-            int result = l("a7");
+            //int result = l("a7");
 
             // Here is an example of using the extension defined below
             // Notice that myStack serves as the parameter labeled "this" below
             Stack<double> myStack = new Stack<double>();
             myStack.Push(1.6);
-           // double x = myStack.StackPeekExtension("a", "b");
+            // double x = myStack.StackPeekExtension("a", "b");
 
             //// Casting a double to an int will truncate it
-            return Int32.Parse(last);
+            ///<summary>
+            /// put an if statement to ensure parsing a string to an int will convert successfully.
+            ///</summary>
+            int rslt = 0;
+                if (int.TryParse(last, out rslt))
+                    return Int32.Parse(last);
+                else
+                    return 0;
+            
+
         }
 
         /// <summary>
