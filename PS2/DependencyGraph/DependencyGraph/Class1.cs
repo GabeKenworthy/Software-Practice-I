@@ -50,7 +50,7 @@ namespace SpreadsheetUtilities
         {
             get {
                 int count = 0;
-                foreach ( HashSet<string> entry in DG)
+                foreach ( HashSet<string> entry in DG.Values)
                 {
                     count += 1;
 
