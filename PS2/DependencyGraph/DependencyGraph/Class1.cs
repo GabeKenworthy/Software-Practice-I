@@ -74,24 +74,32 @@ namespace SpreadsheetUtilities
         {
             get
             {
-                bool pass = false;
-                HashSet<string> hset = new HashSet<string>();
+                int count = 0;
+
+                //bool pass = false;
+                //HashSet<string> hset = new HashSet<string>();
                 foreach (KeyValuePair<string, HashSet<string>> entry in DG)
                 {
-                   
-                    if (entry.Key.Equals(s))
+                    if(entry.Value.Contains(s))
                     {
-                        pass = true;
-                        hset = entry.Value;
-
-
+                        count++;
                     }
-     
                 }
-                if (pass == true)
-                    return hset.Count();
-                else
-                    return 0;
+                return count;
+
+                //    if (entry.Key.Equals(s))
+                //    {
+                //        pass = true;
+                //        hset = entry.Value;
+
+
+                //    }
+
+
+                //if (pass == true)
+                //    return hset.Count();
+                //else
+                //    return 0;
 
             }
                     
@@ -157,7 +165,7 @@ namespace SpreadsheetUtilities
             {
                 if(entry.Key.Equals(s))
                 {
-                    hset.UnionWith(entry.Value);
+                    hset = entry.Value;
 
                 }
                 
