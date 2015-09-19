@@ -120,12 +120,15 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<string> GetDependents(string s)
         {
-            //HashSet<string>
-            //foreach (KeyValuePair<string, HashSet<string>> entry in DG)
-            //{
+            HashSet<string> hset = new HashSet<string>();
+            foreach (KeyValuePair<string, HashSet<string>> entry in DG)
+            {
+                hset.UnionWith(entry.Value);
 
 
-            //}
+            }
+            return hset;
+        }
         /// <summary>
         /// Enumerates dependees(s).
         /// </summary>
