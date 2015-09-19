@@ -71,7 +71,29 @@ namespace SpreadsheetUtilities
         /// </summary>
         public int this[string s]
         {
-            get { return 0; }
+            get
+            {
+                bool pass = false;
+                HashSet<string> hset = new HashSet<string>();
+                foreach (KeyValuePair<string, HashSet<string>> entry in DG)
+                {
+                   
+                    if (entry.Key.Equals(s))
+                    {
+                        pass = true;
+                        hset = entry.Value;
+
+
+                    }
+     
+                }
+                if (pass == true)
+                    return hset.Count();
+                else
+                    return 0;
+
+            }
+                    
         }
 
 
@@ -98,8 +120,12 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<string> GetDependents(string s)
         {
-            return null;
-        }
+            //HashSet<string>
+            //foreach (KeyValuePair<string, HashSet<string>> entry in DG)
+            //{
+
+
+            //}
         /// <summary>
         /// Enumerates dependees(s).
         /// </summary>
