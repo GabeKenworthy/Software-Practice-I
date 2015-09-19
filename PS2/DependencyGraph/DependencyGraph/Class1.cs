@@ -52,7 +52,7 @@ namespace SpreadsheetUtilities
                 int count = 0;
                 foreach ( HashSet<string> entry in DG.Values)
                 {
-                    count += 1;
+                    count += entry.Count;
 
                 }
                 return count;
@@ -120,7 +120,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<string> GetDependents(string s)
         {
-            HashSet<string> hset = new HashSet<string>();
+            HashSet<string> hset = new HashSet<string> { } ;
             foreach (KeyValuePair<string, HashSet<string>> entry in DG)
             {
                 hset.UnionWith(entry.Value);
@@ -128,6 +128,7 @@ namespace SpreadsheetUtilities
 
             }
             return hset;
+           
         }
         /// <summary>
         /// Enumerates dependees(s).
