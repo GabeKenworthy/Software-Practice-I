@@ -48,7 +48,17 @@ namespace SpreadsheetUtilities
         /// </summary>
         public int Size
         {
-            get { return 0; }
+            get {
+                int count = 0;
+                foreach ( HashSet<string> entry in DG)
+                {
+                    count += 1;
+
+                }
+                return count;
+
+
+            }
         }
 
 
