@@ -182,11 +182,13 @@ namespace PS2GradingTests
             HashSet<String> cDents = new HashSet<String>(t.GetDependents("c"));
             HashSet<String> dDents = new HashSet<String>(t.GetDependents("d"));
             HashSet<String> eDents = new HashSet<String>(t.GetDependents("e"));
+
             HashSet<String> aDees = new HashSet<String>(t.GetDependees("a"));
             HashSet<String> bDees = new HashSet<String>(t.GetDependees("b"));
             HashSet<String> cDees = new HashSet<String>(t.GetDependees("c"));
             HashSet<String> dDees = new HashSet<String>(t.GetDependees("d"));
             HashSet<String> eDees = new HashSet<String>(t.GetDependees("e"));
+
             Assert.IsTrue(aDents.Count == 2 && aDents.Contains("b") && aDents.Contains("c"));
             Assert.IsTrue(bDents.Count == 0);
             Assert.IsTrue(cDents.Count == 0);

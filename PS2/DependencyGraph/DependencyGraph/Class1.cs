@@ -155,7 +155,12 @@ namespace SpreadsheetUtilities
             HashSet<string> hset = new HashSet<string> { } ;
             foreach (KeyValuePair<string, HashSet<string>> entry in DG)
             {
-                hset.UnionWith(entry.Value);
+                if(entry.Key.Equals(s))
+                {
+                    hset.UnionWith(entry.Value);
+
+                }
+                
 
 
             }
