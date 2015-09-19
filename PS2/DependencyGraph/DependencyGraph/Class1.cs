@@ -26,6 +26,7 @@ namespace SpreadsheetUtilities
     //     dependents("b") = {"d"}
     //     dependents("c") = {}
     //     dependents("d") = {"d"}
+
     //     dependees("a") = {}
     //     dependees("b") = {"a"}
     //     dependees("c") = {"a"}
@@ -102,7 +103,22 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependents(string s)
         {
-            return false;
+            bool b = false;
+            foreach (KeyValuePair<string, HashSet<string>> entry in DG)
+            {
+                if(entry.Key.Equals(s))
+                {
+                    if(entry.Value != null)
+                    {
+                        b = true;
+
+                    }
+
+                }
+            }
+            return b;
+
+
         }
 
 
@@ -111,7 +127,23 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependees(string s)
         {
-            return false;
+            bool b = false;
+
+            foreach (KeyValuePair<string, HashSet<string>> entry in DG)
+            {
+                if (entry.Value.Contains(s))
+                { 
+
+                    b = true;
+
+
+                }
+            }
+            return b;
+
+
+
+
         }
 
 
