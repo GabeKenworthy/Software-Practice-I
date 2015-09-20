@@ -229,6 +229,8 @@ namespace PS2GradingTests
             t.AddDependency("a", "c");
             t.AddDependency("d", "c");
             t.RemoveDependency("a", "b");
+            //t.RemoveDependency("c", "c");
+
             Assert.AreEqual(2, t.Size);
         }
 
