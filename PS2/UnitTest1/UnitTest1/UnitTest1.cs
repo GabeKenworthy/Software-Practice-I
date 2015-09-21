@@ -482,5 +482,194 @@ namespace PS2GradingTests
                 Assert.IsTrue(dees[i].SetEquals(new HashSet<string>(t.GetDependees(letters[i]))));
             }
         }
+        [TestMethod()]
+        public void mytest1()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("b", "c");
+            Assert.AreEqual(2, t.Size);
+        }
+        [TestMethod()]
+        public void mytest2()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "b");
+            Assert.AreEqual(1, t.Size);
+        }
+        [TestMethod()]
+        public void mytest3()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            Assert.IsFalse(t.HasDependees("a"));
+            Assert.IsFalse(t.HasDependees("d"));
+            Assert.IsTrue(t.HasDependees("c"));
+            Assert.IsTrue(t.HasDependents("a"));
+            Assert.IsTrue(t.HasDependees("c"));
+        }
+        [TestMethod()]
+        public void mytest4()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            Assert.AreEqual(0, t["a"]);
+            Assert.AreEqual(1, t["b"]);
+            Assert.AreEqual(2, t["c"]);
+            Assert.AreEqual(0, t["d"]);
+            Assert.AreEqual(0, t["e"]);
+        }
+        [TestMethod()]
+        public void mytest5()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+         
+            Assert.AreEqual(0, t["a"]);
+            Assert.AreEqual(1, t["b"]);
+            Assert.AreEqual(0, t["c"]);
+            Assert.AreEqual(0, t["d"]);
+            Assert.AreEqual(0, t["e"]);
+        }
+        [TestMethod()]
+        public void mytest6()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.RemoveDependency("a", "b");
+            t.RemoveDependency("a", "c");
+            //t.RemoveDependency("c", "c");
+
+            Assert.AreEqual(1, t.Size);
+        }
+        [TestMethod()]
+        public void mytest7()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.ReplaceDependents("a", new HashSet<string>() { "x", "y", "z" });
+            HashSet<String> aPends = new HashSet<string>(t.GetDependents("a"));
+            Assert.IsTrue(aPends.SetEquals(new HashSet<string>() { "x", "y", "z" }));
+
+        }
+        [TestMethod()]
+        public void mytest8()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.ReplaceDependees("c", new HashSet<string>() { "g", "a", "b","e" });
+            HashSet<String> cDees = new HashSet<string>(t.GetDependees("c"));
+            Assert.IsTrue(cDees.SetEquals(new HashSet<string>() { "g", "a", "b", "e" }));
+        }
+        [TestMethod()]
+        public void mytest9()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("c", "b");
+            t.AddDependency("d", "c");
+            Assert.AreEqual(4, t.Size);
+        }
+        [TestMethod()]
+        public void mytest10()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("a", "c");
+            Assert.AreEqual(2, t.Size);
+        }
+        [TestMethod()]
+        public void mytest11()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            Assert.IsFalse(t.HasDependees("a"));
+            Assert.IsTrue(t.HasDependees("b"));
+            Assert.IsTrue(t.HasDependents("d"));
+            Assert.IsTrue(t.HasDependees("c"));
+        }
+        [TestMethod()]
+        public void mytest12()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            Assert.AreEqual(0, t["a"]);
+            Assert.AreEqual(1, t["b"]);
+            Assert.AreEqual(2, t["c"]);
+            Assert.AreEqual(0, t["d"]);
+            Assert.AreEqual(0, t["e"]);
+        }
+        [TestMethod()]
+        public void mytest13()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+
+            t.RemoveDependency("a", "b");
+            t.RemoveDependency("a", "c");
+            t.RemoveDependency("d", "c");
+            //t.RemoveDependency("c", "c");
+
+            Assert.AreEqual(0, t.Size);
+        }
+        [TestMethod()]
+        public void mytest14()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.ReplaceDependents("a", new HashSet<string>() { "g", "a", "b", "e" });
+            HashSet<String> aPends = new HashSet<string>(t.GetDependents("a"));
+            Assert.IsTrue(aPends.SetEquals(new HashSet<string>() { "g", "a", "b", "e" }));
+        }
+        [TestMethod()]
+        public void mytest15()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("d", "b");
+            t.AddDependency("d", "c");
+            t.AddDependency("a", "c");
+            t.ReplaceDependents("a", new HashSet<string>() { "g", "a", "b", "e" });
+            HashSet<String> aPends = new HashSet<string>(t.GetDependents("a"));
+            Assert.IsTrue(aPends.SetEquals(new HashSet<string>() { "g", "a", "b", "e" }));
+        }
     }
 }
