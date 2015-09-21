@@ -35,9 +35,12 @@ namespace SpreadsheetUtilities
     public class DependencyGraph
     {
         /// <summary>
-        /// Creates an empty DependencyGraph.
+        /// Private instance variable for an empty DependencyGraph constructor.
         /// </summary>
         Dictionary<string, HashSet<string>> DG;
+        /// <summary>
+        /// Creates an empty DependencyGraph.
+        /// </summary>
         public DependencyGraph()
         {
            DG = new Dictionary<string, HashSet<string>>();
