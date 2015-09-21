@@ -256,14 +256,19 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
-            foreach (KeyValuePair<string, HashSet<string>> entry in DG)
+            foreach (HashSet<string> entry in DG.Values)
             {
-                if (entry.Key.Equals(s))
-                {
-                    DG.Remove(entry.Key);
-                }
+                RemoveDependency(s, entry.First());
+
+
 
             }
+            //foreach (KeyValuePair<string, HashSet<string>> entry in DG)
+            //{
+            //    RemoveDependency(entry.Key,entry.Value.First());
+               
+
+            //}
             foreach(string t in newDependents)
                 AddDependency(s, t);
 
