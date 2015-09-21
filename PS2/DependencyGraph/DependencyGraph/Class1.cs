@@ -226,20 +226,27 @@ namespace SpreadsheetUtilities
         /// <param name="t"></param>
         public void RemoveDependency(string s, string t)
         {
-            Dictionary<string, HashSet<string>> newDG = new Dictionary<string, HashSet<string>>();
-            newDG = DG;
-            DG = new Dictionary<string, HashSet<string>>();
-            foreach (KeyValuePair<string, HashSet<string>> entry in newDG)
+            foreach (KeyValuePair<string, HashSet<string>> entry in DG)
             {
-                if(!entry.Key.Equals(s) && !entry.Value.Equals(t))
+                if(entry.Key.Equals(s) && entry.Value.Contains(t))
                 {
-                    AddDependency(s,t);
+
+                   // var item = DG.First(kvp => kvp.Value);
+
+                   // DG.Remove(entry.Key);
+                    entry.Value.Remove(t);
+
+
+
+
 
                 }
-
             }
-          
-   
+
+
+
+
+
         }
 
 
@@ -271,6 +278,13 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
+            foreach (KeyValuePair<string, HashSet<string>> entry in DG)
+            {
+
+
+            }
+
+
         }
 
     }
