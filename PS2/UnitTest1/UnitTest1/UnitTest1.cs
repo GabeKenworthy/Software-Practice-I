@@ -482,6 +482,10 @@ namespace PS2GradingTests
                 Assert.IsTrue(dees[i].SetEquals(new HashSet<string>(t.GetDependees(letters[i]))));
             }
         }
+        // ********************************** MY TESTS ******************** //
+        /// <summary>
+        ///Nonempty graph should contain something
+        ///</summary>
         [TestMethod()]
         public void mytest1()
         {
@@ -490,6 +494,9 @@ namespace PS2GradingTests
             t.AddDependency("b", "c");
             Assert.AreEqual(2, t.Size);
         }
+        /// <summary>
+        ///Nonempty graph should contain something
+        ///</summary>
         [TestMethod()]
         public void mytest2()
         {
@@ -500,6 +507,9 @@ namespace PS2GradingTests
             t.AddDependency("a", "b");
             Assert.AreEqual(1, t.Size);
         }
+        /// <summary>
+        ///Nonempty graph should contain something
+        ///</summary>
         [TestMethod()]
         public void mytest3()
         {
@@ -513,6 +523,9 @@ namespace PS2GradingTests
             Assert.IsTrue(t.HasDependents("a"));
             Assert.IsTrue(t.HasDependees("c"));
         }
+        /// <summary>
+        ///Nonempty graph should contain something
+        ///</summary>
         [TestMethod()]
         public void mytest4()
         {
@@ -529,6 +542,9 @@ namespace PS2GradingTests
             Assert.AreEqual(0, t["d"]);
             Assert.AreEqual(0, t["e"]);
         }
+        /// <summary>
+        ///Nonempty graph should contain something
+        ///</summary>
         [TestMethod()]
         public void mytest5()
         {
@@ -541,6 +557,9 @@ namespace PS2GradingTests
             Assert.AreEqual(0, t["d"]);
             Assert.AreEqual(0, t["e"]);
         }
+        /// <summary>
+        ///Removes dependency
+        ///</summary>
         [TestMethod()]
         public void mytest6()
         {
@@ -554,6 +573,9 @@ namespace PS2GradingTests
 
             Assert.AreEqual(1, t.Size);
         }
+        /// <summary>
+        ///Replaces dependency
+        ///</summary>
         [TestMethod()]
         public void mytest7()
         {
@@ -569,6 +591,9 @@ namespace PS2GradingTests
             Assert.IsTrue(aPends.SetEquals(new HashSet<string>() { "x", "y", "z" }));
 
         }
+        /// <summary>
+        ///Replaces Dependency
+        ///</summary>
         [TestMethod()]
         public void mytest8()
         {
@@ -580,6 +605,9 @@ namespace PS2GradingTests
             HashSet<String> cDees = new HashSet<string>(t.GetDependees("c"));
             Assert.IsTrue(cDees.SetEquals(new HashSet<string>() { "g", "a", "b", "e" }));
         }
+        /// <summary>
+        ///Nonempty graph should contain something
+        ///</summary>
         [TestMethod()]
         public void mytest9()
         {
@@ -590,6 +618,9 @@ namespace PS2GradingTests
             t.AddDependency("d", "c");
             Assert.AreEqual(4, t.Size);
         }
+        /// <summary>
+        ///Nonempty graph should contain something
+        ///</summary>
         [TestMethod()]
         public void mytest10()
         {
@@ -600,6 +631,9 @@ namespace PS2GradingTests
             t.AddDependency("a", "c");
             Assert.AreEqual(2, t.Size);
         }
+        /// <summary>
+        ///Nonempty graph should contain something
+        ///</summary>
         [TestMethod()]
         public void mytest11()
         {
@@ -612,6 +646,9 @@ namespace PS2GradingTests
             Assert.IsTrue(t.HasDependents("d"));
             Assert.IsTrue(t.HasDependees("c"));
         }
+        /// <summary>
+        ///Nonempty graph should contain something
+        ///</summary>
         [TestMethod()]
         public void mytest12()
         {
@@ -631,6 +668,9 @@ namespace PS2GradingTests
             Assert.AreEqual(0, t["d"]);
             Assert.AreEqual(0, t["e"]);
         }
+        /// <summary>
+        ///Removes Dependency
+        ///</summary>
         [TestMethod()]
         public void mytest13()
         {
@@ -646,6 +686,9 @@ namespace PS2GradingTests
 
             Assert.AreEqual(0, t.Size);
         }
+        /// <summary>
+        ///Replaces Dependency
+        ///</summary>
         [TestMethod()]
         public void mytest14()
         {
@@ -660,6 +703,9 @@ namespace PS2GradingTests
             HashSet<String> aPends = new HashSet<string>(t.GetDependents("a"));
             Assert.IsTrue(aPends.SetEquals(new HashSet<string>() { "g", "a", "b", "e" }));
         }
+        /// <summary>
+        ///Replaces Dependency
+        ///</summary>
         [TestMethod()]
         public void mytest15()
         {
