@@ -263,12 +263,7 @@ namespace SpreadsheetUtilities
 
 
             }
-            //foreach (KeyValuePair<string, HashSet<string>> entry in DG)
-            //{
-            //    RemoveDependency(entry.Key,entry.Value.First());
-               
-
-            //}
+     
             foreach(string t in newDependents)
                 AddDependency(s, t);
 
@@ -285,12 +280,31 @@ namespace SpreadsheetUtilities
         {
             foreach (KeyValuePair<string, HashSet<string>> entry in DG)
             {
+                if(entry.Value.Contains(s))
+                {
+                    RemoveDependency(entry.Key,s);
 
+                }
+               
+
+            }
+            foreach (string t in newDependees)
+            {
+                AddDependency(t,s);
 
             }
 
-
         }
+
+        //foreach (HashSet<string> entry in DG.Values)
+        //{
+        //    RemoveDependency(entry.First(),s);
+        //}
+
+
+
+
+
 
     }
 
