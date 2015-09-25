@@ -236,35 +236,20 @@ namespace PS1GradingTests
         [TestMethod()]
         public void myTest3()
         {
+           
+
+            Assert.IsTrue(new Formula("2.0 + x7").Equals(new Formula("2.000 + x7")));
+
 
         }
         [TestMethod()]
         public void myTest4()
         {
+            Assert.IsFalse(new Formula("2.0 + x7").GetHashCode().Equals(0));
+
 
         }
-        [TestMethod()]
-        public void myTest5()
-        {
-
-        }
-        [TestMethod()]
-        public void myTest6()
-        {
-
-        }
-        [TestMethod()]
-        public void myTest7()
-        {
-
-        }
-        [TestMethod()]
-        public void myTest8()
-        {
-
-        }
-
-
+  
 
     }
 }
