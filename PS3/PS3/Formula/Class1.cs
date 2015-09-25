@@ -197,6 +197,47 @@ namespace SpreadsheetUtilities
         /// </summary>
         public object Evaluate(Func<string, double> lookup)
         {
+            Stack<String> Operators = new Stack<string>();
+
+            Stack<double> Values = new Stack<double>();
+            double d = 0;
+            foreach (string s in str)
+            {
+               
+                if(double.TryParse(s, out d))
+                {
+                    if(Operators.Count > 0 && (Operators.Peek() == "*" || Operators.Peek() == "/"))
+                    {
+                        if(Operators.Peek() == "*")
+                        {
+                            double x1 = d * Values.Pop();
+                            Values.Push(x1);
+
+                        }
+                       else if (Operators.Peek() == "/")
+                        {
+                            if (d != 0)
+                            {
+                                double x1 = Values.Pop() / d;
+                                Values.Push(x1);
+                            }
+                            else
+                            {
+                                return new FormulaError("divide by zero error");
+
+                            }
+
+                        }
+
+
+                    }
+
+
+                }
+
+            }
+     
+
             return null;
         }
 
