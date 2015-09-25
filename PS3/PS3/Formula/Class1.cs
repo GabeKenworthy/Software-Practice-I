@@ -36,7 +36,11 @@ namespace SpreadsheetUtilities
     /// </summary>
     public class Formula
     {
-        private string[] str { get; set; }
+        private string[] str
+        {
+            get;
+            set;
+        }
         /// <summary>
         /// Creates a Formula from a string that consists of an infix expression written as
         /// described in the class comment.  If the expression is syntactically invalid,
@@ -47,7 +51,7 @@ namespace SpreadsheetUtilities
         /// maps every string to true.  
         /// </summary>
         public Formula(String formula) :
-            this(formula, s => s, s => true)
+        this(formula, s => s, s => true)
         {
         }
         //http://stackoverflow.com/questions/14659287/regex-for-english-characters-hyphen-and-underscore
@@ -56,8 +60,7 @@ namespace SpreadsheetUtilities
             // "*" means zero or more
             // "+ means 1 or more"
             //starts with (a-z or A-z) but can end with a number, letter, or underscore
-            return Regex.IsMatch(s, @"^[A - Za - z_] +[A - Za - z\d_]*$");
-
+            return Regex.IsMatch(s, @"^[A-Za-z_]+[A-Za-z\d_]*$", RegexOptions.IgnorePatternWhitespace);
         }
 
 
@@ -90,55 +93,45 @@ namespace SpreadsheetUtilities
         {
 
             str = GetTokens(formula).ToArray<string>();
-            if(str.Length == 0)
+            if (str.Length == 0)
             {
                 throw new FormulaFormatException("Formula cannot be empty.");
-
             }
             double d;
             if (!double.TryParse(str[0], out d) && (str[0] != "(") && (checkVariable(str[0]) == false))
             {
                 throw new FormulaFormatException("Formula must start with left parenthesis, number, or variable");
-
             }
             int countLeft = 0;
             int countRight = 0;
-            for (int i = 0;i< str.Length;i++)
+            for (int i = 0; i < str.Length; i++)
             {
                 string token = str[i];
-                if(token == "(")
+                if (token == "(")
                 {
-                    countLeft ++;
-
+                    countLeft++;
                 }
-                if(token == ")")
+                if (token == ")")
                 {
                     countRight++;
-
                 }
-                if(countRight>countLeft)
+                if (countRight > countLeft)
                 {
                     throw new FormulaFormatException("Missing left paranthesis");
                 }
-                if(token == "(" || token == "+" || token == "/" || token == "*" || token == "-")
+                if (token == "(" || token == "+" || token == "/" || token == "*" || token == "-")
                 {
-                    if ((str[i + 1] != "(") && (checkVariable(str[i + 1]) == false) && (!double.TryParse(str[i+1],out d)))
+                    if (i<str.Length-1&&(str[i + 1] != "(") && (checkVariable(str[i + 1]) == false) && (!double.TryParse(str[i + 1], out d)))
                     {
                         throw new FormulaFormatException("A number, left parenthesis, or variable must follow a left parenthesis or operator.");
-
                     }
-
                 }
-                else if(token == ")" || double.TryParse(token,out d) || checkVariable(token))
+                else if (token == ")" || double.TryParse(token, out d) || checkVariable(token))
                 {
-                    if(str[i+1]!=")" || str[i + 1] != "+" || str[i + 1] != "-" || str[i + 1] != "/" || str[i + 1] != "*")
+                    if (i < str.Length - 1 && (str[i + 1] != ")" && str[i + 1] != "+" && str[i + 1] != "-" && str[i + 1] != "/" && str[i + 1] != "*"))
                     {
                         throw new FormulaFormatException("A right parenthesis, or operator must follow a variable,number or right parenthesis");
-
-
                     }
-                  
-
                 }
                 else
                 {
@@ -148,31 +141,22 @@ namespace SpreadsheetUtilities
                 if (double.TryParse(token, out d))
                 {
                     str[i] = d.ToString();
-
                 }
-                if(checkVariable(token) && !isValid(token))
+                if (checkVariable(token) && !isValid(token))
                 {
                     throw new FormulaFormatException("Entered variables are not valid.");
-                    
-
                 }
-
-
             }
-            if(countLeft != countRight)
+            if (countLeft != countRight)
             {
                 throw new FormulaFormatException("Parenthesis to not match up");
-
             }
-            if((str[str.Length-1] != ")") && !double.TryParse(str[str.Length-1],out d) && !checkVariable(str[str.Length-1]))
+            if ((str[str.Length - 1] != ")") && !double.TryParse(str[str.Length - 1], out d) && !checkVariable(str[str.Length - 1]))
             {
                 throw new FormulaFormatException("Last Token is not a variable, right parenthesis, or number");
-
             }
-        
-
         }
-        
+
 
         /// <summary>
         /// Evaluates this Formula, using the lookup delegate to determine the values of
@@ -203,18 +187,17 @@ namespace SpreadsheetUtilities
             double d = 0;
             foreach (string s in str)
             {
-               
-                if(double.TryParse(s, out d))
+
+                if (double.TryParse(s, out d))
                 {
-                    if(Operators.Count > 0 && (Operators.Peek() == "*" || Operators.Peek() == "/"))
+                    if (Operators.Count > 0 && (Operators.Peek() == "*" || Operators.Peek() == "/"))
                     {
-                        if(Operators.Peek() == "*")
+                        if (Operators.Peek() == "*")
                         {
                             double x1 = d * Values.Pop();
                             Values.Push(x1);
-
                         }
-                       else if (Operators.Peek() == "/")
+                        else if (Operators.Peek() == "/")
                         {
                             if (d != 0)
                             {
@@ -224,22 +207,154 @@ namespace SpreadsheetUtilities
                             else
                             {
                                 return new FormulaError("divide by zero error");
-
                             }
+                        }
+                        Operators.Pop();
+                    }
+                    else
+                    {
+                        Values.Push(d);
+                    }
+                }
+                else if (checkVariable(s))
+                {
+
+                    try
+                    {
+
+                        d = lookup(s);
+                    }
+                    catch
+                    {
+                        return new FormulaError("Variable not found");
+                    }
+                    if (Operators.Count > 0 && (Operators.Peek() == "*" || Operators.Peek() == "/"))
+                    {
+                        if (Operators.Peek() == "*")
+                        {
+                            double x1 = d * Values.Pop();
+                            Values.Push(x1);
+                        }
+                        else if (Operators.Peek() == "/")
+                        {
+                            if (d != 0)
+                            {
+                                double x1 = Values.Pop() / d;
+                                Values.Push(x1);
+                            }
+                            else
+                            {
+                                return new FormulaError("divide by zero error");
+                            }
+                        }
+                    }
+                    else
+                        Values.Push(d);
+                }
+                else if ( s == "+" || s == "-")
+                {
+                    if(Operators.Count > 0 && (Operators.Peek() == "+" || Operators.Peek() == "-"))
+                    {
+                        if(Operators.Peek() == "+")
+                        {
+                            double x1 = Values.Pop() + Values.Pop();
+                            Values.Push(x1);
 
                         }
+                        if (Operators.Peek() == "-")
+                        {
+                            double x1 = Values.Pop() - Values.Pop();
+                            
+                            x1 *= -1;
+                            Values.Push(x1);
 
+                        }
+                        Operators.Pop();
+                        Operators.Push(s);
 
                     }
 
+                    else
+                    {
+                        Operators.Push(s);
+                    }
+                    
+
+
+                    
+                }
+                if(s == "*"|| s == "/"|| s == "(")
+                {
+                    Operators.Push(s);
 
                 }
+                if(s == ")")
+                {
+                    if (Operators.Count > 0 && (Operators.Peek() == "+" || Operators.Peek() == "-"))
+                    {
+                        if (Operators.Peek() == "+")
+                        {
+                            double x1 = Values.Pop() + Values.Pop();
+                            Values.Push(x1);
 
+                        }
+                        if (Operators.Peek() == "-")
+                        {
+                            double x1 = Values.Pop() - Values.Pop();
+
+                            x1 *= -1;
+                            Values.Push(x1);
+
+                        }
+                        Operators.Pop();
+
+                    }
+                    Operators.Pop();
+                    if (Operators.Count > 0 && (Operators.Peek() == "*" || Operators.Peek() == "/"))
+                    {
+                        d = Values.Pop();
+                        if (Operators.Peek() == "*")
+                        {
+                            double x1 = d * Values.Pop();
+                            Values.Push(x1);
+                        }
+                        else if (Operators.Peek() == "/")
+                        {
+                            if (d != 0)
+                            {
+                                double x1 = Values.Pop() / d;
+                                Values.Push(x1);
+                            }
+                            else
+                            {
+                                return new FormulaError("divide by zero error");
+                            }
+                        }
+                    }
+
+                }
             }
-     
+            if (Operators.Count > 0)
+            {
+                if (Operators.Peek() == "+")
+                {
+                    double x1 = Values.Pop() + Values.Pop();
+                    Values.Push(x1);
 
-            return null;
+                }
+                if (Operators.Peek() == "-")
+                {
+                    double x1 = Values.Pop() - Values.Pop();
+
+                    x1 *= -1;
+                    Values.Push(x1);
+
+                }
+                
+            }
+            return Values.Pop();
         }
+
 
         /// <summary>
         /// Enumerates the normalized versions of all of the variables that occur in this 
@@ -256,17 +371,14 @@ namespace SpreadsheetUtilities
         {
             //hashsets won't let you put in same variable twice, reasonable dataset.
             HashSet<string> v = new HashSet<string>();
-            foreach(string token in str)
+            foreach (string token in str)
             {
-                if(checkVariable(token))
+                if (checkVariable(token))
                 {
                     v.Add(token);
-
                 }
-
             }
             return v;
-            
         }
 
         /// <summary>
@@ -307,15 +419,12 @@ namespace SpreadsheetUtilities
             {
                 return false;
             }
-            if(obj == null)
+            if (obj == null)
             {
                 return false;
-
             }
             //checking to see if the current string is equal to the object string.
             return ToString().Equals(obj.ToString());
-
-
         }
 
         /// <summary>
@@ -326,15 +435,13 @@ namespace SpreadsheetUtilities
         public static bool operator ==(Formula f1, Formula f2)
         {
             //casting into objects so it can use "==" and to prevent recursion.
-            if((object)f1 == null && (object)f2== null)
+            if ((object)f1 == null && (object)f2 == null)
             {
                 return true;
-
             }
-            else if((object)f1 == null || (object)f2 == null)
+            else if ((object)f1 == null || (object)f2 == null)
             {
                 return false;
-
             }
             return f1.Equals(f2);
         }
@@ -379,7 +486,7 @@ namespace SpreadsheetUtilities
 
             // Overall pattern
             String pattern = String.Format("({0}) | ({1}) | ({2}) | ({3}) | ({4}) | ({5})",
-                                            lpPattern, rpPattern, opPattern, varPattern, doublePattern, spacePattern);
+            lpPattern, rpPattern, opPattern, varPattern, doublePattern, spacePattern);
 
             // Enumerate matching tokens that don't consist solely of white space.
             foreach (String s in Regex.Split(formula, pattern, RegexOptions.IgnorePatternWhitespace))
@@ -389,20 +496,21 @@ namespace SpreadsheetUtilities
                     yield return s;
                 }
             }
-
         }
     }
 
     /// <summary>
     /// Used to report syntactic errors in the argument to the Formula constructor.
     /// </summary>
-    public class FormulaFormatException : Exception
+    public class FormulaFormatException :
+      Exception
     {
         /// <summary>
         /// Constructs a FormulaFormatException containing the explanatory message.
         /// </summary>
         public FormulaFormatException(String message)
-            : base(message)
+    :
+          base(message)
         {
         }
     }
@@ -417,7 +525,8 @@ namespace SpreadsheetUtilities
         /// </summary>
         /// <param name="reason"></param>
         public FormulaError(String reason)
-            : this()
+    :
+          this()
         {
             Reason = reason;
         }
@@ -425,7 +534,10 @@ namespace SpreadsheetUtilities
         /// <summary>
         ///  The reason why this FormulaError was created.
         /// </summary>
-        public string Reason { get; private set; }
+        public string Reason
+        {
+            get;
+            private set;
+        }
     }
 }
-
