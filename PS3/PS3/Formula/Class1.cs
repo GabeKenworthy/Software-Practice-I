@@ -129,6 +129,33 @@ namespace SpreadsheetUtilities
                     }
 
                 }
+                else if(token == ")" || double.TryParse(token,out d) || checkVariable(token))
+                {
+                    if(str[i+1]!=")" || str[i + 1] != "+" || str[i + 1] != "-" || str[i + 1] != "/" || str[i + 1] != "*")
+                    {
+                        throw new FormulaFormatException("A right parenthesis, or operator must follow a variable,number or right parenthesis");
+
+
+                    }
+                  
+
+                }
+                else
+                {
+                    throw new FormulaFormatException("Illegal token entered.");
+                }
+                //truncates and eliminates extra zeroes in double
+                if (double.TryParse(token, out d))
+                {
+                    str[i] = d.ToString();
+
+                }
+                if(checkVariable(token) && !isValid(token))
+                {
+                    throw new FormulaFormatException("Entered variables are not valid.");
+                    
+
+                }
 
 
             }
@@ -142,7 +169,7 @@ namespace SpreadsheetUtilities
                 throw new FormulaFormatException("Last Token is not a variable, right parenthesis, or number");
 
             }
-
+        
 
         }
         
