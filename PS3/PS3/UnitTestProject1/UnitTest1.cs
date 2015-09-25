@@ -218,7 +218,52 @@ namespace PS1GradingTests
             Assert.AreEqual(0.0, new Formula("a4-a4*a4/a4").Evaluate(s => 3));
 
         }
-  
+        [TestMethod()]
+        public void myTest1()
+        {
+            Formula f = new Formula("a4-a4*a4/a4");
+            Assert.IsFalse(f.GetVariables().Equals(0));
+               
+        }
+        [TestMethod()]
+        public void myTest2()
+        {
+            Formula f = new Formula("a4-a4*a4/a4");
+            Assert.IsTrue(f.ToString().Contains("a"));
+
+
+        }
+        [TestMethod()]
+        public void myTest3()
+        {
+
+        }
+        [TestMethod()]
+        public void myTest4()
+        {
+
+        }
+        [TestMethod()]
+        public void myTest5()
+        {
+
+        }
+        [TestMethod()]
+        public void myTest6()
+        {
+
+        }
+        [TestMethod()]
+        public void myTest7()
+        {
+
+        }
+        [TestMethod()]
+        public void myTest8()
+        {
+
+        }
+
 
 
     }

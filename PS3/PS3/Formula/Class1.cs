@@ -54,6 +54,7 @@ namespace SpreadsheetUtilities
         this(formula, s => s, s => true)
         {
         }
+        //found out how to do the regex function from the link below
         //http://stackoverflow.com/questions/14659287/regex-for-english-characters-hyphen-and-underscore
         private bool checkVariable(string s)
         {
