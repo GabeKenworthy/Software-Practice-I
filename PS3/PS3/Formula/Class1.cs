@@ -213,7 +213,19 @@ namespace SpreadsheetUtilities
         /// </summary>
         public IEnumerable<String> GetVariables()
         {
-            return null;
+            //hashsets won't let you put in same variable twice, reasonable dataset.
+            HashSet<string> v = new HashSet<string>();
+            foreach(string token in str)
+            {
+                if(checkVariable(token))
+                {
+                    v.Add(token);
+
+                }
+
+            }
+            return v;
+            
         }
 
         /// <summary>
@@ -228,7 +240,8 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override string ToString()
         {
-            return null;
+            //join() goes through inenumerable str and adds empty strings inbetween each value, then returns it as a string.
+            return string.Join(string.Empty, str);
         }
 
         /// <summary>
@@ -249,7 +262,19 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override bool Equals(object obj)
         {
-            return false;
+            if (obj.GetType() != typeof(Formula))
+            {
+                return false;
+            }
+            if(obj == null)
+            {
+                return false;
+
+            }
+            //checking to see if the current string is equal to the object string.
+            return ToString().Equals(obj.ToString());
+
+
         }
 
         /// <summary>
@@ -259,7 +284,18 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator ==(Formula f1, Formula f2)
         {
-            return false;
+            //casting into objects so it can use "==" and to prevent recursion.
+            if((object)f1 == null && (object)f2== null)
+            {
+                return true;
+
+            }
+            else if((object)f1 == null || (object)f2 == null)
+            {
+                return false;
+
+            }
+            return f1.Equals(f2);
         }
 
         /// <summary>
@@ -269,7 +305,8 @@ namespace SpreadsheetUtilities
         /// </summary>
         public static bool operator !=(Formula f1, Formula f2)
         {
-            return false;
+            //calls double equals method, and makes it not equal.
+            return !(f1 == f2);
         }
 
         /// <summary>
@@ -279,7 +316,8 @@ namespace SpreadsheetUtilities
         /// </summary>
         public override int GetHashCode()
         {
-            return 0;
+            //takes string of formula and hashes it. Hashcodes will be the same if tostrings are the same.
+            return ToString().GetHashCode();
         }
 
         /// <summary>
