@@ -247,6 +247,7 @@ namespace SpreadsheetUtilities
                                 return new FormulaError("divide by zero error");
                             }
                         }
+                        Operators.Pop();
                     }
                     else
                         Values.Push(d);
@@ -330,6 +331,7 @@ namespace SpreadsheetUtilities
                                 return new FormulaError("divide by zero error");
                             }
                         }
+                        Operators.Pop();
                     }
 
                 }

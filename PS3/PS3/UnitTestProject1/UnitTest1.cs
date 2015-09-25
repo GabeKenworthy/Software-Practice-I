@@ -1,6 +1,9 @@
 ﻿using SpreadsheetUtilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Text.RegularExpressions;
+
+
 
 namespace PS1GradingTests
 {
@@ -111,97 +114,110 @@ namespace PS1GradingTests
 
         }
 
-        //[TestMethod()]
-        //public void Test15()
-        //{
-        //    Assert.AreEqual(26, Evaluator.Evaluate("2+3*(3+5)", s => 0));
-        //}
+        [TestMethod()]
+        public void Test15()
+        {
+            Assert.AreEqual(26.0, new Formula("2+3*(3+5)").Evaluate(s => 0));
 
-        //[TestMethod()]
-        //public void Test16()
-        //{
-        //    Assert.AreEqual(194.0, Evaluator.Evaluate("2+3*5+(3+4*8)*5+2", s => 0));
-        //}
 
-        //[TestMethod()]
-        //[ExpectedException(typeof(ArgumentException))]
-        //public void Test17()
-        //{
-        //    Evaluator.Evaluate("5/0", s => 0);
-        //}
+        }
 
-        //[TestMethod()]
-        //[ExpectedException(typeof(ArgumentException))]
-        //public void Test18()
-        //{
-        //    Evaluator.Evaluate("+", s => 0);
-        //}
+        [TestMethod()]
+        public void Test16()
+        {
+            Assert.AreEqual(194.0, new Formula("2+3*5+(3+4*8)*5+2").Evaluate(s => 0));
 
-        //[TestMethod()]
-        //[ExpectedException(typeof(ArgumentException))]
-        //public void Test19()
-        //{
-        //    Evaluator.Evaluate("2+5+", s => 0);
-        //}
+        }
 
-        //[TestMethod()]
-        //[ExpectedException(typeof(ArgumentException))]
-        //public void Test20()
-        //{
-        //    Evaluator.Evaluate("2+5*7)", s => 0);
-        //}
+        [TestMethod()]
+        public void Test17()
+        {
+            Assert.AreEqual(new Formula("5/0").Evaluate(s => 0).GetType(),typeof(FormulaError));
+        }
 
-        //[TestMethod()]
-        //[ExpectedException(typeof(ArgumentException))]
-        //public void Test21()
-        //{
-        //    Evaluator.Evaluate("xx", s => 0);
-        //}
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Test18()
+        {
+            new Formula("+").Evaluate( s => 0);
+    
+        }
 
-        //[TestMethod()]
-        //[ExpectedException(typeof(ArgumentException))]
-        //public void Test22()
-        //{
-        //    Evaluator.Evaluate("5+xx", s => 0);
-        //}
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Test19()
+        {
+            new Formula("2+5+").Evaluate(s => 0);
 
-        //[TestMethod()]
-        //[ExpectedException(typeof(ArgumentException))]
-        //public void Test23()
-        //{
-        //    Evaluator.Evaluate("5+7+(5)8", s => 0);
-        //}
+        }
 
-        //[TestMethod()]
-        //[ExpectedException(typeof(ArgumentException))]
-        //public void Test24()
-        //{
-        //    Evaluator.Evaluate("", s => 0);
-        //}
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Test20()
+        {
+            new Formula("2+5*7)").Evaluate(s => 0);
 
-        //[TestMethod()]
-        //public void Test25()
-        //{
-        //    Assert.AreEqual(-12.0, Evaluator.Evaluate("y1*3-8/2+4*(8-9*2)/2*x7", s => (s == "x7") ? 1 : 4));
-        //}
+        }
 
-        //[TestMethod()]
-        //public void Test26()
-        //{
-        //    Assert.AreEqual(6.0, Evaluator.Evaluate("x1+(x2+(x3+(x4+(x5+x6))))", s => 1));
-        //}
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Test21()
+        {
+            new Formula("xx",s=>s,s=> Regex.IsMatch(s, @"^[A-Za-z]+[\d]+$")).Evaluate(s => 0);
 
-        //[TestMethod()]
-        //public void Test27()
-        //{
-        //    Assert.AreEqual(12.0, Evaluator.Evaluate("((((x1+x2)+x3)+x4)+x5)+x6", s => 2));
-        //}
+        }
 
-        //[TestMethod()]
-        //public void Test28()
-        //{
-        //    Assert.AreEqual(0.0, Evaluator.Evaluate("a4-a4*a4/a4", s => 3));
-        //}
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Test22()
+        {
+            new Formula("5+xx",s=>s,s => Regex.IsMatch(s, @"^[A-Za-z]+[\d]+$")).Evaluate(s => 0);
+
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Test23()
+        {
+            new Formula("5+7+(5)8").Evaluate(s => 0);
+
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(FormulaFormatException))]
+        public void Test24()
+        {
+            new Formula("").Evaluate(s => 0);
+
+        }
+
+        [TestMethod()]
+        public void Test25()
+        {
+            Assert.AreEqual(-12.0, new Formula("y1*3-8/2+4*(8-9*2)/2*x7").Evaluate(s => (s == "x7") ? 1 : 4));
+
+        }
+
+        [TestMethod()]
+        public void Test26()
+        {
+            Assert.AreEqual(6.0, new Formula("x1+(x2+(x3+(x4+(x5+x6))))").Evaluate(s => 1));
+
+        }
+
+        [TestMethod()]
+        public void Test27()
+        {
+            Assert.AreEqual(12.0, new Formula("((((x1+x2)+x3)+x4)+x5)+x6").Evaluate(s => 2));
+
+        }
+
+        [TestMethod()]
+        public void Test28()
+        {
+            Assert.AreEqual(0.0, new Formula("a4-a4*a4/a4").Evaluate(s => 3));
+
+        }
 
     }
 }
