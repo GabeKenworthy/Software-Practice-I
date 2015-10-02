@@ -10,7 +10,10 @@ public class Spreadsheet : AbstractSpreadsheet
     /// <summary>
     /// Enumerates the names of all the non-empty cells in the spreadsheet.
     /// </summary>
-    public abstract IEnumerable<String> GetNamesOfAllNonemptyCells();
+    public IEnumerable<String> GetNamesOfAllNonemptyCells()
+    {
+        
+    }
 
 
     /// <summary>
@@ -18,7 +21,10 @@ public class Spreadsheet : AbstractSpreadsheet
     /// 
     /// Otherwise, returns the contents (as opposed to the value) of the named cell.  The return
     /// value should be either a string, a double, or a Formula.
-    public abstract object GetCellContents(String name);
+    public object GetCellContents(String name)
+    {
+
+    }
 
 
     /// <summary>
@@ -31,7 +37,10 @@ public class Spreadsheet : AbstractSpreadsheet
     /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
     /// set {A1, B1, C1} is returned.
     /// </summary>
-    public abstract ISet<String> SetCellContents(String name, double number);
+    public ISet<String> SetCellContents(String name, double number)
+    {
+
+    }
 
     /// <summary>
     /// If text is null, throws an ArgumentNullException.
@@ -45,7 +54,10 @@ public class Spreadsheet : AbstractSpreadsheet
     /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
     /// set {A1, B1, C1} is returned.
     /// </summary>
-    public abstract ISet<String> SetCellContents(String name, String text);
+    public ISet<String> SetCellContents(String name, String text)
+    {
+
+    }
 
     /// <summary>
     /// If the formula parameter is null, throws an ArgumentNullException.
@@ -62,7 +74,10 @@ public class Spreadsheet : AbstractSpreadsheet
     /// For example, if name is A1, B1 contains A1*2, and C1 contains B1+A1, the
     /// set {A1, B1, C1} is returned.
     /// </summary>
-    public abstract ISet<String> SetCellContents(String name, Formula formula);
+    public ISet<String> SetCellContents(String name, Formula formula)
+    {
+
+    }
 
 
     /// <summary>
@@ -82,7 +97,10 @@ public class Spreadsheet : AbstractSpreadsheet
     /// D1 contains the formula B1 - C1
     /// The direct dependents of A1 are B1 and C1
     /// </summary>
-    protected abstract IEnumerable<String> GetDirectDependents(String name);
+    protected IEnumerable<String> GetDirectDependents(String name)
+    {
+
+    }
 
 
     /// <summary>
