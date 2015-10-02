@@ -1,17 +1,34 @@
 ﻿using System;
 using AbstractSpreadsheet;
 
+
 public class Spreadsheet : AbstractSpreadsheet
 {
+    DependencyGraph DG;
+    Dictionary<string, cell> cellDictionary;
+
     public Spreadsheet()
-    { 
-       
+    {
+       DG = new DependencyGraph();
+       cellDictionary = new Dictionary<string, cell>();
+
     }
     /// <summary>
     /// Enumerates the names of all the non-empty cells in the spreadsheet.
     /// </summary>
     public IEnumerable<String> GetNamesOfAllNonemptyCells()
     {
+        Array<string> arr = new Array<string>();
+        foreach (KeyValuePair<string, cell> c in DG)
+        {
+            if(c.Value.values != null)
+            {
+                arr.add(c.Key);
+
+            }
+        }
+        return arr;
+        
         
     }
 
@@ -23,6 +40,16 @@ public class Spreadsheet : AbstractSpreadsheet
     /// value should be either a string, a double, or a Formula.
     public object GetCellContents(String name)
     {
+        if(name == null)
+        {
+            throw InvalidNameException;
+
+        }
+        else
+        {
+            return DG[name];
+        }
+
 
     }
 
@@ -39,6 +66,8 @@ public class Spreadsheet : AbstractSpreadsheet
     /// </summary>
     public ISet<String> SetCellContents(String name, double number)
     {
+        throw NotImplementedException;
+
 
     }
 
@@ -56,6 +85,8 @@ public class Spreadsheet : AbstractSpreadsheet
     /// </summary>
     public ISet<String> SetCellContents(String name, String text)
     {
+        throw NotImplementedException;
+
 
     }
 
@@ -76,6 +107,8 @@ public class Spreadsheet : AbstractSpreadsheet
     /// </summary>
     public ISet<String> SetCellContents(String name, Formula formula)
     {
+        throw NotImplementedException;
+
 
     }
 
@@ -99,6 +132,8 @@ public class Spreadsheet : AbstractSpreadsheet
     /// </summary>
     protected IEnumerable<String> GetDirectDependents(String name)
     {
+        throw NotImplementedException;
+
 
     }
 
