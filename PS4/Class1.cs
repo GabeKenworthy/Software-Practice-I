@@ -1,5 +1,6 @@
 ﻿using System;
 using AbstractSpreadsheet;
+using SpreadsheetUtilities;
 
 
 public class Spreadsheet : AbstractSpreadsheet
@@ -66,7 +67,15 @@ public class Spreadsheet : AbstractSpreadsheet
     /// </summary>
     public ISet<String> SetCellContents(String name, double number)
     {
-        throw NotImplementedException;
+        if(name.Equals(null))
+        {
+            throw InvalidNameException;
+
+        }
+        else
+        {
+            DG[name] = number;
+        }
 
 
     }
@@ -85,7 +94,37 @@ public class Spreadsheet : AbstractSpreadsheet
     /// </summary>
     public ISet<String> SetCellContents(String name, String text)
     {
-        throw NotImplementedException;
+        Set<string> set = new Set<string>();
+        if (text.Equals(null))
+        {
+            throw ArgumentNullException;
+
+        }
+        else if (name.Equals(null))
+        {
+            throw InvalidNameException;
+        }
+        else
+        {
+            DG[name] = text;
+
+        }
+        foreach (KeyValuePair<string, cell> c in DG)
+        {
+            if ((c.Value) == name)
+            {
+                set.add(c.Value);
+
+            }
+            if ((c.Key) == name)
+            {
+                set.add(c.Key);
+
+            }
+
+        }
+        return set;
+
 
 
     }
@@ -107,7 +146,20 @@ public class Spreadsheet : AbstractSpreadsheet
     /// </summary>
     public ISet<String> SetCellContents(String name, Formula formula)
     {
-        throw NotImplementedException;
+        if(formula.equals(null))
+        {
+            throw ArgumentNullException;
+
+        }
+        else if(name.Equals(null))
+        {
+            throw InvalidNameException;
+
+        }
+        else
+        {
+
+        }
 
 
     }
