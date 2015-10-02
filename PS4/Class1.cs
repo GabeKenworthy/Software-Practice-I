@@ -1,9 +1,9 @@
 ﻿using System;
 using AbstractSpreadsheet;
 
-public class Class1
+public class Spreadsheet : AbstractSpreadsheet
 {
-	public Class1()
+	public Spreadsheet()
 	{
 	}
 }
