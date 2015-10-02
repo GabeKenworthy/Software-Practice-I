@@ -176,6 +176,17 @@ public class Spreadsheet : AbstractSpreadsheet
     }
 
 }
+class cell
+{
+    public object values { get; set; }
+    public object contents { get; set; }
+
+    public cell(object cellContents)
+    {
+        contents = cellContents;
+
+    }
+}
     
 
 
